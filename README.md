@@ -1,66 +1,10 @@
-## Foundry
+## Nouns.wtf auction bot
 
-**Foundry is a blazing fast, portable and modular toolkit for Ethereum application development written in Rust.**
+**THOSE CONTRACTS HAVEN'T BEEN AUDITED AND THIS IS THE AUTHOR FIRST SELF WRITTEN CONTRACT. USE WITH CAUTION**
 
-Foundry consists of:
 
--   **Forge**: Ethereum testing framework (like Truffle, Hardhat and DappTools).
--   **Cast**: Swiss army knife for interacting with EVM smart contracts, sending transactions and getting chain data.
--   **Anvil**: Local Ethereum node, akin to Ganache, Hardhat Network.
--   **Chisel**: Fast, utilitarian, and verbose solidity REPL.
+**This smart contract can place a bid with the Nouns Auction Bot**
 
-## Documentation
+The maximum amount allowed for bidding is set at deployment with the constructor but can then be modified by calling ```setBidCeiling()```
 
-https://book.getfoundry.sh/
-
-## Usage
-
-### Build
-
-```shell
-$ forge build
-```
-
-### Test
-
-```shell
-$ forge test
-```
-
-### Format
-
-```shell
-$ forge fmt
-```
-
-### Gas Snapshots
-
-```shell
-$ forge snapshot
-```
-
-### Anvil
-
-```shell
-$ anvil
-```
-
-### Deploy
-
-```shell
-$ forge script script/Counter.s.sol:CounterScript --rpc-url <your_rpc_url> --private-key <your_private_key>
-```
-
-### Cast
-
-```shell
-$ cast <subcommand>
-```
-
-### Help
-
-```shell
-$ forge --help
-$ anvil --help
-$ cast --help
-```
+if the contract wins the auction, the owner can withdraw the NFT
