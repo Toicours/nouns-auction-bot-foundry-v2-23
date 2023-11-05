@@ -11,20 +11,17 @@ contract DailyBidder {
     INounsAuctionHouse nounsAuctionHouse;
     uint256 public s_bidCeiling;
     address public s_owner;
-    // uint256 public s_reservePrice;
     address public s_chainlinkAutomationContract;
 
     event PlacedBid(address indexed bidder, uint256 indexed amount);
 
     // Modifiers
     modifier onlyOwner() {
-        // require(msg.sender == i_owner);
         if (msg.sender != s_owner) revert FundMe__NotOwner();
         _;
     }
 
     modifier onlyOwnerOrAutomationContract() {
-        // require(msg.sender == i_owner);
         if (
             msg.sender != s_owner || msg.sender == s_chainlinkAutomationContract
         ) revert FundMe__NotOwner();
@@ -37,7 +34,7 @@ contract DailyBidder {
             "Invalid Nouns Auction House address"
         );
         nounsAuctionHouse = INounsAuctionHouse(_nounsAuctionHouse);
-        s_owner = msg.sender;
+        s_owner = msg.sender; // Set the intended owner as the owner
         s_bidCeiling = bid_ceiling;
     }
 
@@ -51,6 +48,11 @@ contract DailyBidder {
         address automationContract
     ) external onlyOwner {
         s_chainlinkAutomationContract = automationContract;
+    }
+
+    // Function to get the owner of the contract
+    function getOwner() public view returns (address) {
+        return s_owner;
     }
 
     // This function retrieves the necessary info for the bid from the Auction House

@@ -22,17 +22,16 @@ contract BidderTest is Test {
     bool settled;
 
     uint256 public constant BIDDER_BALANCE = 100 ether;
-    address public OWNER = makeAddr("owner");
+    address public owner;
 
     event PlacedBid(address indexed bidder, uint256 indexed amount);
 
     function setUp() external {
-        // vm.startBroadcast(OWNER);
         DeployBidder deployer = new DeployBidder();
-        // vm.stopBroadcast();
         (dailyBidder, bid_ceiling, nounsAuctionHouse) = deployer.run();
 
         // give bidder some ETH
+        owner = DailyBidder(dailyBidder).getOwner();
         vm.deal(address(dailyBidder), BIDDER_BALANCE);
     }
 
@@ -71,7 +70,7 @@ contract BidderTest is Test {
     }
 
     function test_RevertsIfIncorrectNounID() public getAuctionInfo {
-        vm.startBroadcast(OWNER);
+        vm.startBroadcast(owner);
         dailyBidder.placeBid();
         vm.stopBroadcast();
     }
@@ -106,7 +105,7 @@ contract BidderTest is Test {
          */
 
         // Call the function that places the bid
-        vm.startBroadcast(OWNER);
+        vm.startBroadcast(owner);
         dailyBidder.placeBid();
         vm.stopBroadcast();
 
@@ -131,13 +130,13 @@ contract BidderTest is Test {
         );
 
         // Calculate the expected balance after withdrawal
-        uint256 expectedBalance = address(OWNER).balance + contractBalance;
-        console.log("Owner balance: %s", address(OWNER).balance);
+        uint256 expectedBalance = address(owner).balance + contractBalance;
+        console.log("Owner balance: %s", address(owner).balance);
         console.log("contractBalance: %s", contractBalance);
         console.log("Expected balance: %s", expectedBalance);
 
         // Withdraw Ether
-        vm.startBroadcast(OWNER);
+        vm.startBroadcast(owner);
         dailyBidder.withdrawEther();
         vm.stopBroadcast();
         // Query the updated contract balance
@@ -145,7 +144,7 @@ contract BidderTest is Test {
 
         // Check balances
         console.log("**************** BROADCAST STOPPED ****************");
-        console.log("Owner balance: %s", address(OWNER).balance);
+        console.log("Owner balance: %s", address(owner).balance);
         console.log("updatedContractBalance: %s", updatedContractBalance);
         console.log("Expected balance: %s", expectedBalance);
         assertEq(
@@ -154,7 +153,7 @@ contract BidderTest is Test {
             "Contract should have 0 balance after withdrawal"
         );
         assertEq(
-            address(OWNER).balance,
+            address(owner).balance,
             expectedBalance,
             "Owner should receive the ETH from the contract"
         );
@@ -172,7 +171,7 @@ contract BidderTest is Test {
     // Test that the bid ceiling update is respected
     function test_BidCeilingUpdateIsRespected() public {
         uint256 newCeiling = 20 ether;
-        vm.startBroadcast(OWNER);
+        vm.startBroadcast(owner);
         dailyBidder.setBidCeiling(newCeiling);
         vm.stopBroadcast();
         assertEq(
@@ -214,7 +213,7 @@ contract BidderTest is Test {
         vm.warp(endTime + 1); // Move time just past the auction end time
         // Expect the revert message
         vm.expectRevert("Auction already ended");
-        vm.prank(OWNER);
+        vm.prank(owner);
         dailyBidder.placeBid();
     }
 
@@ -261,23 +260,23 @@ contract BidderTest is Test {
         );
 
         // Simulate the owner withdrawing the NFT
-        vm.startBroadcast(OWNER);
+        vm.startBroadcast(owner);
         dailyBidder.withdrawNFT(address(mockNFT), tokenId);
         vm.stopBroadcast();
 
         // Check that the owner of the DailyBidder contract now owns the token
         assertEq(
             mockNFT.ownerOf(tokenId),
-            OWNER,
+            owner,
             "Owner should have the token after withdrawal"
         );
     }
 
     function test_EventEmittedOnBid() public getAuctionInfo {
         vm.expectEmit(true, true, false, true);
-        emit PlacedBid(OWNER, amount);
+        emit PlacedBid(owner, amount);
 
-        vm.prank(OWNER);
+        vm.prank(owner);
         dailyBidder.placeBid();
     }
 
@@ -307,7 +306,7 @@ contract BidderTest is Test {
 
     function test_SuceedsIfOwnerUpdatesOwner() public {
         address newOwner = makeAddr("newOwner");
-        vm.prank(OWNER); //
+        vm.prank(owner); //
         dailyBidder.setNewOwner(newOwner);
 
         assertEq(
