@@ -10,7 +10,7 @@ error FundMe__NotOwner();
 contract DailyBidder {
     INounsAuctionHouse nounsAuctionHouse;
     uint256 public s_bidCeiling;
-    address public s_owner;
+    address private s_owner;
     address public s_chainlinkAutomationContract;
 
     event PlacedBid(address indexed bidder, uint256 indexed amount);

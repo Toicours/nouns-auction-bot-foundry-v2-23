@@ -310,7 +310,7 @@ contract BidderTest is Test {
         dailyBidder.setNewOwner(newOwner);
 
         assertEq(
-            dailyBidder.s_owner(),
+            dailyBidder.getOwner(),
             newOwner,
             "Owner should be updated to newOwner"
         );
