@@ -41,9 +41,11 @@ NETWORK_ARGS := --rpc-url http://localhost:8545 --private-key $(DEFAULT_ANVIL_KE
 
 # Set up network arguments based on the selected network
 ifeq ($(NETWORK),mainnet)
-	NETWORK_ARGS := --rpc-url $(MAINNET_RPC_URL) --account deployerKey --sender 0x83C73e1aCa5D406862e0D37Ff87A1175AFCefa5e --broadcast --verify --etherscan-api-key $(ETHERSCAN_API_KEY) -vvvv
+	NETWORK_ARGS := --rpc-url $(MAINNET_RPC_URL) --account deployerKey --sender 0x83C73e1aCa5D406862e0D37Ff87A1175AFCefa5e --broadcast --verify --optimizer-runs 200  --etherscan-api-key $(ETHERSCAN_API_KEY) -vvvv
 else ifeq ($(NETWORK),sepolia)
-	NETWORK_ARGS := --rpc-url $(SEPOLIA_RPC_URL) --account deployerKey --sender 0x83C73e1aCa5D406862e0D37Ff87A1175AFCefa5e --broadcast --verify --etherscan-api-key $(ETHERSCAN_API_KEY) -vvvv
+	NETWORK_ARGS := --rpc-url $(SEPOLIA_RPC_URL) --account deployerKey --sender 0x83C73e1aCa5D406862e0D37Ff87A1175AFCefa5e --broadcast --verify --optimizer-runs 200 --etherscan-api-key $(ETHERSCAN_API_KEY) -vvvv
+else ifeq ($(NETWORK),arbitrum)
+	NETWORK_ARGS := --rpc-url $(ARBITRUM_RPC_URL) --account deployerKey --sender 0x83C73e1aCa5D406862e0D37Ff87A1175AFCefa5e --broadcast --verify --optimizer-runs 200 --etherscan-api-key $(ARBISCAN_API_KEY) -vvvv
 else
 	# If not mainnet, use default values or other network configurations
 	NETWORK_ARGS := --rpc-url http://localhost:8545 --private-key $(DEFAULT_ANVIL_KEY) --broadcast

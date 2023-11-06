@@ -21,8 +21,8 @@ contract HelperConfig is Script {
     constructor() {
         if (block.chainid == 1) {
             activeNetworkConfig = getMainnetEthConfig();
-        } else if (block.chainid == 11155111) {
-            activeNetworkConfig = getSepoliaConfig();
+        } else if (block.chainid == 11155111 || block.chainid == 42161) {
+            activeNetworkConfig = getSepoliaOrArbitrumConfig();
         } else if (block.chainid == 31337) {
             activeNetworkConfig = getAnvilConfig();
         } else {
@@ -42,7 +42,10 @@ contract HelperConfig is Script {
         return mainnetConfig;
     }
 
-    function getSepoliaConfig() public returns (NetworkConfig memory) {
+    function getSepoliaOrArbitrumConfig()
+        public
+        returns (NetworkConfig memory)
+    {
         vm.startBroadcast();
         MockAuctionHouse mockAuctionHouse = new MockAuctionHouse();
         vm.stopBroadcast();
