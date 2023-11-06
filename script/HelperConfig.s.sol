@@ -15,7 +15,7 @@ contract HelperConfig is Script {
     // INounsToken _nouns;
     struct NetworkConfig {
         address nounsAuctionHouse;
-        uint256 deployerKey;
+        address deployerKey;
     }
 
     constructor() {
@@ -36,7 +36,7 @@ contract HelperConfig is Script {
             nounsAuctionHouse: address(
                 0x830BD73E4184ceF73443C15111a1DF14e495C706
             ),
-            deployerKey: vm.envUint("PRIVATE_KEY")
+            deployerKey: vm.envAddress("DEPLOYER_ADDRESS")
         });
         // console.log("Deployer key:", mainnetConfig.deployerKey);
         return mainnetConfig;
@@ -48,9 +48,9 @@ contract HelperConfig is Script {
         vm.stopBroadcast();
         NetworkConfig memory mainnetConfig = NetworkConfig({
             nounsAuctionHouse: address(mockAuctionHouse),
-            deployerKey: vm.envUint("PRIVATE_KEY")
+            deployerKey: vm.envAddress("DEPLOYER_ADDRESS")
         });
-        // console.log("Deployer key:", mainnetConfig.deployerKey);
+        console.log("Deployer address:", mainnetConfig.deployerKey);
         return mainnetConfig;
     }
 
@@ -60,9 +60,9 @@ contract HelperConfig is Script {
         vm.stopBroadcast();
         NetworkConfig memory mainnetConfig = NetworkConfig({
             nounsAuctionHouse: address(mockAuctionHouse),
-            deployerKey: vm.envUint("DEFAULT_ANVIL_KEY")
+            deployerKey: vm.envAddress("ANVIL_ADDRESS")
         });
-        // console.log("Deployer key:", mainnetConfig.deployerKey);
+        console.log("Deployer address:", mainnetConfig.deployerKey);
         return mainnetConfig;
     }
 }

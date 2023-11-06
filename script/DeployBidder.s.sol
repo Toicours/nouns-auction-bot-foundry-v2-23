@@ -14,7 +14,7 @@ contract DeployBidder is Script {
     uint256 public s_bid_ceiling = 10 ether;
     address public s_nounsAuctionHouse;
     address public s_BidderContractOwner;
-    uint256 public s_deployerKey;
+    address public s_deployerKey;
 
     function run() external returns (DailyBidder, uint256, address) {
         // Log the current chain ID
